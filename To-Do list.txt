@@ -1,0 +1,8 @@
+-Creating 3 nonflying creatures that are controlled by the player. (Casper)
+	No collision.
+	Creatures need to walk when player clicks somewhere.
+	
+-4 different tile types with different travel-costs. (In collaboration on Thursday)
+	Add graphics to the different tile types.
+
+-Implement a-star logic in Python. (Leon)
