@@ -11,7 +11,7 @@ using UnityEngine;
 public class HelloRequester : RunAbleThread
 {
     public string messageToSend;
-  
+
     ///     Stop requesting when Running=false.
     protected override void Run()
     {

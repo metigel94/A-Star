@@ -104,43 +104,41 @@ context = zmq.Context()
 socket = context.socket(zmq.REP)
 socket.bind("tcp://*:5555")
 
+gridSend = False
+
+
+def splitGrid(input, size):
+	return [input[start:start+size] for start in range(0, len(input), size)]
 
 while True:
-
-    #  Wait for next request from client
     message = socket.recv()
     
-    # positions = message.encode('ASCII')
     positions = message.decode().split(",")
 
+    startPosition = (int(positions[0]), int(positions[1]))
+    endPosition = (int(positions[2]), int(positions[3]))
+
+    x = 10
+    y = 10
+
+    if(gridSend == False):
+        grid = positions[4]
+        grid = list(grid)
+        grid = [int(i) for i in grid]
+        grid = splitGrid(grid, 25)
+        gridSend = True
+
+    testTouple = (x,y)
+    testTouple2 = (20,20)
     
-    startPosition = "(" + positions[0] + "," + positions[1] + ")"
-    endPosition = "(" + positions[2] + "," + positions [3] + ")"
 
-
-    maze = positions[4]
-    maze = list(maze)
-    # maze = [int(i) for i in maze]
-    # maze = int(maze)
+    # finalPath = astar(grid, testTouple, testTouple2)
+    finalPath = astar(grid, endPosition, startPosition)
     
-    def splitMaze(input, size):
-	    return [input[start:start+size] for start in range(0, len(input), size)]
-    
-    maze = splitMaze(maze, 25)
-
-    finalPath = astar(maze, startPosition, endPosition)
-
     print(finalPath)
-    # we need to receive start node, the end node
+    
+    
+    time.sleep(0.2)
 
-    # Now we need to split up the string into two and then send back the end path, which should be "return path".
-
-
-
-    #  In the real world usage, you just need to replace time.sleep() with
-    #  whatever work you want python to do.
-    time.sleep(0.1)
-
-    #  Send reply back to client
     #  In the real world usage, after you finish your work, send your output here
-    socket.send(b'Hello World')
+    socket.send(b'Received')
