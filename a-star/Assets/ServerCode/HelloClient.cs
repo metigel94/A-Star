@@ -10,13 +10,23 @@ public class HelloClient : MonoBehaviour
     public Quaternion joint;
     public Transform pos;
     string message;
- 
+    string positions;
+
     
     void Update()
     {
         if (SendPack)
-        {
-            string positions = GameObject.Find("SeekerCharacter").transform.position.ToString() + "   " + GameObject.Find("TargetCharacter").transform.position.ToString();
+        { 
+
+
+             positions = Mathf.RoundToInt(GameObject.Find("SeekerCharacter").transform.position.x) + "," + Mathf.RoundToInt(GameObject.Find("SeekerCharacter").transform.position.z) + ","
+              + Mathf.RoundToInt(GameObject.Find("TargetCharacter").transform.position.x) + "," + Mathf.RoundToInt(GameObject.Find("TargetCharacter").transform.position.z) + ","
+              + GameObject.Find("Grid").GetComponent<Grid>().convertedGrid;
+            
+
+
+
+
 
             _helloRequester.messageToSend = positions;
            

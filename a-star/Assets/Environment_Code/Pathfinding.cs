@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Pathfinding : MonoBehaviour
 {
-    Grid grid;
+    public Grid grid;
 
     public Transform seeker, target;
 
@@ -98,5 +98,4 @@ public class Pathfinding : MonoBehaviour
 
         return 14 * dstX + 10 * (dstY - dstX);
     }
-
 }
