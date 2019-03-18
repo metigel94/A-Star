@@ -10,19 +10,31 @@ public class Pathfinding : MonoBehaviour
 
     public List<Node> path = new List<Node>();
 
-    Node[,] test1;
-
 
     void Awake()
     {
         grid = GetComponent<Grid>();
 
-
     }
 
     void Update()
     {
-        test1[0, 0] = 10;        
+
+        //Node test = grid.NodeFromWorldPoint(new Vector3(10, 3, 10));
+        //Node test1 = grid.NodeFromWorldPoint(new Vector3(10, 3, 11));
+        //Node test2 = grid.NodeFromWorldPoint(new Vector3(10, 3, 12));
+        //Node test3 = grid.NodeFromWorldPoint(new Vector3(10, 3, 13));
+
+        //path.Add(test);
+        //path.Add(test1);
+        //path.Add(test2);
+        //path.Add(test3);
+
+
+
+        grid.path = path;
+
+           
         // FindPath(seeker.position, target.position);
         // here you'd have to call the retrace path function with 
         // grid.path = OUR NEW STRING

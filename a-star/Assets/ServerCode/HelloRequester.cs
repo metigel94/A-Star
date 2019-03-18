@@ -13,7 +13,7 @@ using System.Collections.Generic;
 public class HelloRequester : RunAbleThread
 {
     public string messageToSend;
-    // public List<Node> path = new List<Node>();
+    public List<Node> finalPath = new List<Node>();
 
     ///     Stop requesting when Running=false.
     protected override void Run()
@@ -43,8 +43,21 @@ public class HelloRequester : RunAbleThread
                     if (gotMessage)
                     {
                         //Debug.Log("Received " + message);
-                        string[] finalPath = message.Split();
-                        // Debug.Log(finalPath);
+
+                        string newMessage = message.Replace("[(","");
+
+                        newMessage.Replace("(", "");
+                        newMessage.Replace(")", "");
+                        newMessage.Replace(")]", "");
+
+                        string[] finalPath = newMessage.Split();
+
+                        foreach(string n in finalPath)
+                        {
+                            Debug.Log(n);
+                        }
+
+
                     }
                 }       
             }

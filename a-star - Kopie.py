@@ -139,7 +139,7 @@ while True:
     
     pathToUnity = ", ".join(map(str, finalPath))
        
-    time.sleep(0.2)
+    time.sleep(0.01)
 
     #  In the real world usage, after you finish your work, send your output here
     socket.send(pathToUnity.encode())
