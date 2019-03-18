@@ -125,7 +125,7 @@ while True:
         grid = positions[4]
         grid = list(grid)
         grid = [int(i) for i in grid]
-        grid = splitGrid(grid, 25)
+        grid = splitGrid(grid, 50)
         gridSend = True
 
     testTouple = (x,y)
@@ -137,8 +137,9 @@ while True:
     
     print(finalPath)
     
-    
+    pathToUnity = ", ".join(map(str, finalPath))
+       
     time.sleep(0.2)
 
     #  In the real world usage, after you finish your work, send your output here
-    socket.send(b'Received')
+    socket.send(pathToUnity.encode())

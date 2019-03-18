@@ -553,7 +553,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   gridWorldSize: {x: 50, y: 50}
-  nodeRadius: 1
+  nodeRadius: 0.5
   height: 0.2
   convertedGrid: 
   gridSizeX: 0
