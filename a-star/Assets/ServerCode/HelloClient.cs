@@ -5,8 +5,8 @@ using NetMQ.Sockets;
 
 public class HelloClient : MonoBehaviour
 {
-    private HelloRequester _helloRequester;
-    public bool SendPack = true;
+    public static HelloRequester _helloRequester;
+    public static bool SendPack = true;
     public Quaternion joint;
     public Transform pos;
     string message;
@@ -29,7 +29,7 @@ public class HelloClient : MonoBehaviour
 
 
             _helloRequester.messageToSend = positions;
-           
+
             
 
 

@@ -4,6 +4,8 @@ using NetMQ.Sockets;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime;
+using System.Linq;
 
 
 ///     You can copy this class and modify Run() to suits your needs.
@@ -13,7 +15,7 @@ using System.Collections.Generic;
 public class HelloRequester : RunAbleThread
 {
     public string messageToSend;
-    public List<Node> finalPath = new List<Node>();
+    public int[] finalPath;
 
     ///     Stop requesting when Running=false.
     protected override void Run()
@@ -44,19 +46,14 @@ public class HelloRequester : RunAbleThread
                     {
                         //Debug.Log("Received " + message);
 
-                        string newMessage = message.Replace("[(","");
+                        string newMessage = message.Replace("(","");
+                        string newNewMessage = newMessage.Replace(")", "");
+                        string newNewNewMessage = newNewMessage.Replace(",", "");
 
-                        newMessage.Replace("(", "");
-                        newMessage.Replace(")", "");
-                        newMessage.Replace(")]", "");
+                        
 
-                        string[] finalPath = newMessage.Split();
-
-                        foreach(string n in finalPath)
-                        {
-                            Debug.Log(n);
-                        }
-
+                        string[] finalStringPath = newNewNewMessage.Split();
+                        finalPath = finalStringPath.Select(s => int.Parse(s)).ToArray();
 
                     }
                 }       

@@ -34,12 +34,25 @@ public class Pathfinding : MonoBehaviour
 
         grid.path = path;
 
+        createNodes();
+
            
         // FindPath(seeker.position, target.position);
         // here you'd have to call the retrace path function with 
         // grid.path = OUR NEW STRING
     }
+
+
+    void createNodes()
+    {
+
+        int[] finalPath = HelloClient._helloRequester.finalPath;
+
+        
+    }
 }
+
+
 
 //    void FindPath(Vector3 startPos, Vector3 targetPos)
 //    {
