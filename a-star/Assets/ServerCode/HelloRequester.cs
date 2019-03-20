@@ -20,7 +20,8 @@ public class HelloRequester : RunAbleThread
     ///     Stop requesting when Running=false.
     protected override void Run()
     {
-        ForceDotNet.Force(); 
+        ForceDotNet.Force();
+        finalPath = new int[49];
 
         using (RequestSocket client = new RequestSocket())
         {
@@ -54,8 +55,6 @@ public class HelloRequester : RunAbleThread
 
                         string[] finalStringPath = newNewNewMessage.Split();
                         finalPath = finalStringPath.Select(s => int.Parse(s)).ToArray();
-
-                     
 
                     }
                 }       

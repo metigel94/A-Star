@@ -10,7 +10,11 @@ public class Pathfinding : MonoBehaviour
 
     public List<Node> path = new List<Node>();
 
-    float speed;
+    public float speed;
+
+    public int[] finalPath;
+
+    int targetIndex;
 
 
     void Awake()
@@ -22,62 +26,62 @@ public class Pathfinding : MonoBehaviour
     void Update()
     {
 
-        //Node test = grid.NodeFromWorldPoint(new Vector3(10, 3, 10));
-        //Node test1 = grid.NodeFromWorldPoint(new Vector3(10, 3, 11));
-        //Node test2 = grid.NodeFromWorldPoint(new Vector3(10, 3, 12));
-        //Node test3 = grid.NodeFromWorldPoint(new Vector3(10, 3, 13));
-
-        //path.Add(test);
-        //path.Add(test1);
-        //path.Add(test2);
-        //path.Add(test3);
-
-
         createNodes();
 
-           
-        // FindPath(seeker.position, target.position);
-        // here you'd have to call the retrace path function with 
-        // grid.path = OUR NEW STRING
     }
 
 
     void createNodes()
     {
+        finalPath = HelloRequester.finalPath;
 
-        if(seeker.hasChanged || target.hasChanged)
+        if(finalPath[0] != 0)
         {
-            path.Clear();
+            if (seeker.hasChanged || target.hasChanged)
+            {
+                path.Clear();
 
-            int[] finalPath = HelloRequester.finalPath;
-
-            for (int i = 0; i < finalPath.Length; i++)
-            {   
-                if (i % 2 == 0) // x-value
+                for (int i = 0; i < finalPath.Length; i++)
                 {
-                    Node test = grid.NodeFromWorldPoint(new Vector3(finalPath[i], 0, finalPath[i + 1]));
-                    path.Add(test);
+                    if (i % 2 == 0) // x-value
+                    {
+                        Node test = grid.NodeFromWorldPoint(new Vector3(finalPath[i], 0, finalPath[i + 1]));
+                        path.Add(test);
+                    }
+                }
+
+                grid.path = path;
+
+                FollowPath(finalPath, grid.path);
+
+                seeker.hasChanged = false;
+                target.hasChanged = false;
+            }
+        }
+     }
+
+    IEnumerator FollowPath(int[] finalPath, List<Node> path)
+    {
+        Vector3 currentWaypoint = new Vector3(finalPath[0], 0, finalPath[1]);
+
+        while(true)
+        {
+            if(seeker.transform.position == currentWaypoint)
+            {
+                targetIndex++;
+                if(targetIndex >= path.Count)
+                {
+                    yield break;
+                }
+                if(targetIndex % 2 == 0)
+                {
+                    currentWaypoint = new Vector3(finalPath[targetIndex], 0, finalPath[targetIndex+1]);
                 }
             }
 
-            grid.path = path;
-
-            int j = 0;
-
-            if (seeker.transform.position != grid.path[j].worldPosition)
-            {
-                seeker.transform.position = Vector3.MoveTowards(seeker.transform.position, grid.path[j].worldPosition, 0.01f);
-            }
-            else
-            {
-                j++;
-            }
-
-            seeker.hasChanged = false;
-            target.hasChanged = false;
+            seeker.transform.position = Vector3.MoveTowards(seeker.transform.position, currentWaypoint, 0.05f);
+            yield return null;
         }
-
-
     }
 }
 

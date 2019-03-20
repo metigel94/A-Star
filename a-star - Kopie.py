@@ -118,20 +118,13 @@ while True:
     startPosition = (int(positions[0]), int(positions[1]))
     endPosition = (int(positions[2]), int(positions[3]))
 
-    x = 10
-    y = 10
-
     if(gridSend == False):
         grid = positions[4]
         grid = list(grid)
         grid = [int(i) for i in grid]
         grid = splitGrid(grid, 50)
         gridSend = True
-
-    testTouple = (x,y)
-    testTouple2 = (20,20)
-    
-
+  
     # finalPath = astar(grid, testTouple, testTouple2)
     finalPath = astar(grid, endPosition, startPosition)
     
