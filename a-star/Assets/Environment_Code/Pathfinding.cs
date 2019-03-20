@@ -10,6 +10,8 @@ public class Pathfinding : MonoBehaviour
 
     public List<Node> path = new List<Node>();
 
+    float speed;
+
 
     void Awake()
     {
@@ -50,7 +52,7 @@ public class Pathfinding : MonoBehaviour
             int[] finalPath = HelloRequester.finalPath;
 
             for (int i = 0; i < finalPath.Length; i++)
-            {
+            {   
                 if (i % 2 == 0) // x-value
                 {
                     Node test = grid.NodeFromWorldPoint(new Vector3(finalPath[i], 0, finalPath[i + 1]));
@@ -60,13 +62,22 @@ public class Pathfinding : MonoBehaviour
 
             grid.path = path;
 
+            int j = 0;
+
+            if (seeker.transform.position != grid.path[j].worldPosition)
+            {
+                seeker.transform.position = Vector3.MoveTowards(seeker.transform.position, grid.path[j].worldPosition, 0.01f);
+            }
+            else
+            {
+                j++;
+            }
+
             seeker.hasChanged = false;
             target.hasChanged = false;
         }
 
 
-
-        
     }
 }
 
