@@ -15,7 +15,7 @@ using System.Linq;
 public class HelloRequester : RunAbleThread
 {
     public string messageToSend;
-    public int[] finalPath;
+    public static int[] finalPath;
 
     ///     Stop requesting when Running=false.
     protected override void Run()
@@ -54,6 +54,8 @@ public class HelloRequester : RunAbleThread
 
                         string[] finalStringPath = newNewNewMessage.Split();
                         finalPath = finalStringPath.Select(s => int.Parse(s)).ToArray();
+
+                     
 
                     }
                 }       

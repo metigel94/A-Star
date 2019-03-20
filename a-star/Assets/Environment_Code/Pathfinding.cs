@@ -31,9 +31,6 @@ public class Pathfinding : MonoBehaviour
         //path.Add(test3);
 
 
-
-        grid.path = path;
-
         createNodes();
 
            
@@ -46,7 +43,28 @@ public class Pathfinding : MonoBehaviour
     void createNodes()
     {
 
-        int[] finalPath = HelloClient._helloRequester.finalPath;
+        if(seeker.hasChanged || target.hasChanged)
+        {
+            path.Clear();
+
+            int[] finalPath = HelloRequester.finalPath;
+
+            for (int i = 0; i < finalPath.Length; i++)
+            {
+                if (i % 2 == 0) // x-value
+                {
+                    Node test = grid.NodeFromWorldPoint(new Vector3(finalPath[i], 0, finalPath[i + 1]));
+                    path.Add(test);
+                }
+            }
+
+            grid.path = path;
+
+            seeker.hasChanged = false;
+            target.hasChanged = false;
+        }
+
+
 
         
     }
