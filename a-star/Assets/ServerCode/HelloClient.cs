@@ -19,8 +19,8 @@ public class HelloClient : MonoBehaviour
         { 
 
 
-             positions = Mathf.RoundToInt(GameObject.Find("SeekerCharacter").transform.position.x) + "," + Mathf.RoundToInt(GameObject.Find("SeekerCharacter").transform.position.z) + ","
-              + Mathf.RoundToInt(GameObject.Find("TargetCharacter").transform.position.x) + "," + Mathf.RoundToInt(GameObject.Find("TargetCharacter").transform.position.z) + ","
+             positions = Mathf.RoundToInt(GameObject.Find("SeekerCharacter").transform.position.z) + "," + Mathf.RoundToInt(GameObject.Find("SeekerCharacter").transform.position.x) + ","
+              + Mathf.RoundToInt(GameObject.Find("TargetCharacter").transform.position.z) + "," + Mathf.RoundToInt(GameObject.Find("TargetCharacter").transform.position.x) + ","
               + GameObject.Find("Grid").GetComponent<Grid>().convertedGrid;
             
 

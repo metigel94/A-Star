@@ -38,7 +38,23 @@ public class Grid : MonoBehaviour {
                 bool walkable = !(Physics.CheckSphere(worldPoint, nodeRadius, unwalkableMask));
                 grid[x,y] = new Node(walkable, worldPoint, x, y);
 
-                if (walkable)
+               
+            }
+        }
+
+
+        for(int y = gridSizeY-1; y > 0; y--)
+        {
+            for(int x = 0; x < gridSizeX; x++)
+            {
+
+                Vector3 convertedWorldPoint = worldBottomLeft + Vector3.right *
+                   (x * nodeDiameter + nodeRadius) + Vector3.forward *
+                   (y * nodeDiameter + nodeRadius);
+
+                bool convertedWalkable = !(Physics.CheckSphere(convertedWorldPoint, nodeRadius, unwalkableMask));
+
+                if (convertedWalkable)
                 {
                     convertedGrid += "0";
                 }
@@ -46,10 +62,9 @@ public class Grid : MonoBehaviour {
                 {
                     convertedGrid += "1";
                 }
-                
             }
         }
-
+       
         Debug.Log(grid.Length);
     }
 

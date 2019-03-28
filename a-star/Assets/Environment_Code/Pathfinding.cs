@@ -10,32 +10,62 @@ public class Pathfinding : MonoBehaviour
 
     public List<Node> path = new List<Node>();
 
+    bool once = true;
+
     public float speed;
 
     public int[] finalPath;
 
-    int targetIndex;
+    int i = 0;
+
+    Vector3 currentWaypoint;
+
 
 
     void Awake()
     {
         grid = GetComponent<Grid>();
-
+        currentWaypoint = seeker.transform.position;
     }
 
     void Update()
     {
 
         createNodes();
+        FollowPath();
 
     }
 
+    void FollowPath()
+    {
+
+        if (grid.path != null)
+        {
+            if (seeker.transform.position == currentWaypoint)
+            {
+                if (i < grid.path.Count-1)
+                {
+                    i++;
+                    currentWaypoint = grid.path[i].worldPosition;
+                }
+
+                if(i >= grid.path.Count-1)
+                {
+                    i = 0;
+                }
+
+                Debug.Log("Currentwaypoint: " + currentWaypoint);
+            }
+            seeker.transform.position = Vector3.MoveTowards(seeker.transform.position, currentWaypoint, 0.1f);
+        }
+
+    }
 
     void createNodes()
     {
         finalPath = HelloRequester.finalPath;
 
-        if(finalPath[0] != 0)
+        if (finalPath[0] != 0)
         {
             if (seeker.hasChanged || target.hasChanged)
             {
@@ -45,45 +75,46 @@ public class Pathfinding : MonoBehaviour
                 {
                     if (i % 2 == 0) // x-value
                     {
-                        Node test = grid.NodeFromWorldPoint(new Vector3(finalPath[i], 0, finalPath[i + 1]));
+                        Node test = grid.NodeFromWorldPoint(new Vector3(finalPath[i + 1], 0 , Mathf.Abs((finalPath[i]) - 50)));
                         path.Add(test);
                     }
                 }
 
                 grid.path = path;
 
-                FollowPath(finalPath, grid.path);
+                // FollowPath(finalPath, grid.path);
 
                 seeker.hasChanged = false;
                 target.hasChanged = false;
             }
         }
-     }
-
-    IEnumerator FollowPath(int[] finalPath, List<Node> path)
-    {
-        Vector3 currentWaypoint = new Vector3(finalPath[0], 0, finalPath[1]);
-
-        while(true)
-        {
-            if(seeker.transform.position == currentWaypoint)
-            {
-                targetIndex++;
-                if(targetIndex >= path.Count)
-                {
-                    yield break;
-                }
-                if(targetIndex % 2 == 0)
-                {
-                    currentWaypoint = new Vector3(finalPath[targetIndex], 0, finalPath[targetIndex+1]);
-                }
-            }
-
-            seeker.transform.position = Vector3.MoveTowards(seeker.transform.position, currentWaypoint, 0.05f);
-            yield return null;
-        }
     }
 }
+
+//    IEnumerator FollowPath(int[] finalPath, List<Node> path)
+//    {
+//        Vector3 currentWaypoint = new Vector3(finalPath[0], 0, finalPath[1]);
+
+//        while(true)
+//        {
+//            if(seeker.transform.position == currentWaypoint)
+//            {
+//                targetIndex++;
+//                if(targetIndex >= path.Count)
+//                {
+//                    yield break;
+//                }
+//                if(targetIndex % 2 == 0)
+//                {
+//                    currentWaypoint = new Vector3(finalPath[targetIndex], 0, finalPath[targetIndex+1]);
+//                }
+//            }
+
+//            seeker.transform.position = Vector3.MoveTowards(seeker.transform.position, currentWaypoint, 0.05f);
+//            yield return null;
+//        }
+//    }
+//}
 
 
 

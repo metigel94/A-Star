@@ -53,6 +53,7 @@ def astar(maze, start, end):
             path = []
             current = current_node
             while current is not None:
+                current.position = (current.position[0], current.position[1])
                 path.append(current.position)
                 current = current.parent
             return path[::-1] # Return reversed path
@@ -115,8 +116,8 @@ while True:
     
     positions = message.decode().split(",")
 
-    startPosition = (int(positions[0]), int(positions[1]))
-    endPosition = (int(positions[2]), int(positions[3]))
+    startPosition = (50 - int(positions[0]), int(positions[1]))
+    endPosition = (50 - int(positions[2]), int(positions[3]))
 
     if(gridSend == False):
         grid = positions[4]
@@ -126,7 +127,7 @@ while True:
         gridSend = True
   
     # finalPath = astar(grid, testTouple, testTouple2)
-    finalPath = astar(grid, endPosition, startPosition)
+    finalPath = astar(grid, startPosition, endPosition)
     
     print(finalPath)
     
