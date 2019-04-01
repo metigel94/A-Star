@@ -53,7 +53,7 @@ def astar(maze, start, end):
             path = []
             current = current_node
             while current is not None:
-                current.position = (current.position[0], current.position[1])
+                current.position = (current.position[0], current.position[1]+1)
                 path.append(current.position)
                 current = current.parent
             return path[::-1] # Return reversed path
@@ -70,11 +70,19 @@ def astar(maze, start, end):
                 continue
 
             # Make sure walkable terrain
-            if maze[node_position[0]][node_position[1]] != 0:
+            if maze[node_position[0]][node_position[1]] == 3:
                 continue
 
-            # Create new node
-            new_node = Node(current_node, node_position)
+            if maze[node_position[0]][node_position[1]] == 1:
+                new_node = Node(current_node, node_position)
+                new_node.g = 2
+            
+            if maze[node_position[0]][node_position[1]] == 2:
+                new_node = Node(current_node, node_position)
+                new_node.g = 4
+
+            if maze[node_position[0]][node_position[1]] == 0:
+                new_node = Node(current_node, node_position)
 
             # Append
             children.append(new_node)
@@ -88,10 +96,11 @@ def astar(maze, start, end):
                     continue
 
             # Create the f, g, and h values
-            child.g = current_node.g + 1
+            child.g += current_node.g + 1
             child.h = ((child.position[0] - end_node.position[0]) ** 2) + ((child.position[1] - end_node.position[1]) ** 2)
             child.f = child.g + child.h
 
+            
             # Child is already in the open list
             for open_node in open_list:
                 if child == open_node and child.g > open_node.g:
@@ -129,7 +138,7 @@ while True:
     # finalPath = astar(grid, testTouple, testTouple2)
     finalPath = astar(grid, startPosition, endPosition)
     
-    print(finalPath)
+    # print(finalPath)
     
     pathToUnity = ", ".join(map(str, finalPath))
        

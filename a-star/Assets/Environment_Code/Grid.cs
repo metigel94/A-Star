@@ -5,6 +5,8 @@ using UnityEngine;
 public class Grid : MonoBehaviour {
     Node[,] grid;
     public LayerMask unwalkableMask;
+    public LayerMask grassMask;
+    public LayerMask muddMask;
     public Vector2 gridWorldSize;
     public float nodeRadius;
     public float height;
@@ -36,7 +38,10 @@ public class Grid : MonoBehaviour {
                     (y * nodeDiameter + nodeRadius);
 
                 bool walkable = !(Physics.CheckSphere(worldPoint, nodeRadius, unwalkableMask));
-                grid[x,y] = new Node(walkable, worldPoint, x, y);
+                bool grass = (Physics.CheckSphere(worldPoint, nodeRadius, grassMask));
+                bool mudd = (Physics.CheckSphere(worldPoint, nodeRadius, muddMask));
+
+                grid[x,y] = new Node(walkable, grass, mudd, worldPoint, x, y);
 
                
             }
@@ -53,15 +58,26 @@ public class Grid : MonoBehaviour {
                    (y * nodeDiameter + nodeRadius);
 
                 bool convertedWalkable = !(Physics.CheckSphere(convertedWorldPoint, nodeRadius, unwalkableMask));
+                bool convertedGrass = (Physics.CheckSphere(convertedWorldPoint, nodeRadius, grassMask));
+                bool convertedMudd = (Physics.CheckSphere(convertedWorldPoint, nodeRadius, muddMask));
 
-                if (convertedWalkable)
+                if (convertedWalkable && convertedGrass == false && convertedMudd == false) // Normal Walking terrain - Indicated by a 0
                 {
                     convertedGrid += "0";
                 }
-                else
+                else if (convertedGrass && convertedWalkable && convertedMudd == false) // Grass Terrain - Indicated by a 1
                 {
                     convertedGrid += "1";
                 }
+                else if (convertedMudd && convertedWalkable && convertedGrass == false) // Muddy Terrain - Indicated by a 2 
+                {
+                    convertedGrid += "2";
+                }
+                else if(convertedWalkable == false) // Non-walkable Terrain - Indicated by a 3
+                {
+                    convertedGrid += "3";
+                }
+
             }
         }
        
@@ -122,7 +138,26 @@ public class Grid : MonoBehaviour {
         {
             foreach(Node n in grid)
             {
-                Gizmos.color = (n.walkable) ? Color.white : Color.red;
+                if(n.walkable && n.grass == false && n.mudd == false)
+                {
+                    Gizmos.color = Color.white;
+                }
+
+                else if(n.grass && n.walkable && n.mudd == false)
+                {
+                    Gizmos.color = Color.green;
+                }
+
+                else if(n.mudd && n.grass == false && n.walkable)
+                {
+                    Gizmos.color = Color.blue;
+                }
+
+                else if (n.walkable == false && n.grass == false && n.mudd == false)
+                {
+                    Gizmos.color = Color.red;
+                }
+
                     if(path != null)
                 {
                     if (path.Contains(n))

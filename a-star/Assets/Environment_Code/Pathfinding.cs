@@ -32,7 +32,7 @@ public class Pathfinding : MonoBehaviour
     {
 
         createNodes();
-        FollowPath();
+        //FollowPath();
 
     }
 
