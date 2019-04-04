@@ -23,14 +23,7 @@ public class HelloClient1 : MonoBehaviour
              + Mathf.CeilToInt(GameObject.Find("TargetCharacter").transform.position.z) + "," + Mathf.CeilToInt(GameObject.Find("TargetCharacter").transform.position.x) + ","
              + GameObject.Find("Grid").GetComponent<Grid>().convertedGrid;
 
-
-
-
-
-
             _helloRequester.messageToSend1 = positions;
-
-
 
 
             _helloRequester.Continue();
@@ -45,6 +38,7 @@ public class HelloClient1 : MonoBehaviour
     private void Start()
     {
         _helloRequester = new HelloRequester1();
+        Debug.Log("HelloClient1");
         _helloRequester.Start();
     }
 

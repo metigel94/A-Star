@@ -26,7 +26,6 @@ public class HelloRequester : RunAbleThread
         using (RequestSocket client = new RequestSocket())
         {
             client.Connect("tcp://localhost:5555");
-
             while(Running)
             {
                 if (Send)

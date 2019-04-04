@@ -35,9 +35,10 @@ public class Pathfinding : MonoBehaviour
     void Update()
     {
 
-        createNodes();
-        //FollowPath();
-        createNodes1();
+        CreateNodes();
+        CreateNodes1();
+        FollowPath();
+        FollowPath1();
 
     }
 
@@ -46,36 +47,12 @@ public class Pathfinding : MonoBehaviour
 
         if (grid.path != null)
         {
-            if (seeker.transform.position == currentWaypoint1)
+            if (seeker.transform.position == currentWaypoint)
             {
                 if (i < grid.path.Count - 1)
                 {
                     i++;
-                    currentWaypoint1 = grid.path[i].worldPosition;
-                }
-
-                if (i >= grid.path1.Count - 1)
-                {
-                    i = 0;
-                }
-
-                Debug.Log("Currentwaypoint: " + currentWaypoint1);
-            }
-            seeker1.transform.position = Vector3.MoveTowards(seeker1.transform.position, currentWaypoint1, 0.1f);
-        }
-
-    }
-
-    void FollowPath1()
-    {
-        if (grid.path1 != null)
-        {
-            if (seeker1.transform.position == currentWaypoint)
-            {
-                if (i < grid.path1.Count - 1)
-                {
-                    i++;
-                    currentWaypoint = grid.path1[i].worldPosition;
+                    currentWaypoint = grid.path[i].worldPosition;
                 }
 
                 if (i >= grid.path.Count - 1)
@@ -88,10 +65,34 @@ public class Pathfinding : MonoBehaviour
             seeker.transform.position = Vector3.MoveTowards(seeker.transform.position, currentWaypoint, 0.1f);
         }
 
+    }
+
+    void FollowPath1()
+    {
+        if (grid.path1 != null)
+        {
+            if (seeker1.transform.position == currentWaypoint1)
+            {
+                if (i < grid.path1.Count - 1)
+                {
+                    i++;
+                    currentWaypoint1 = grid.path1[i].worldPosition;
+                }
+
+                if (i >= grid.path1.Count - 1)
+                {
+                    i = 0;
+                }
+
+                Debug.Log("Currentwaypoint: " + currentWaypoint1);
+            }
+            seeker1.transform.position = Vector3.MoveTowards(seeker1.transform.position, currentWaypoint1, 0.1f);
+        }
+
 
     }
 
-    void createNodes()
+    void CreateNodes()
     {
         finalPath = HelloRequester.finalPath;
 
@@ -120,7 +121,7 @@ public class Pathfinding : MonoBehaviour
         }
     }
 
-    void createNodes1()
+    void CreateNodes1()
     {
         finalPath1 = HelloRequester1.finalPath1;
 

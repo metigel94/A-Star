@@ -23,16 +23,15 @@ public class HelloRequester1 : RunAbleThread
         ForceDotNet.Force();
         finalPath1 = new int[49];
 
-        using (RequestSocket client1 = new RequestSocket())
+        using (RequestSocket client = new RequestSocket())
         {
-            client1.Connect("tcp://localhost:5550");
-
+            client.Connect("tcp://localhost:5550");
             while (Running)
             {
                 if (Send)
                 {
                     //string message = client.ReceiveFrameString();
-                    client1.SendFrame(messageToSend1);
+                    client.SendFrame(messageToSend1);
 
 
                     string message = null;
@@ -40,23 +39,23 @@ public class HelloRequester1 : RunAbleThread
 
                     while (Running)
                     {
-                        gotMessage = client1.TryReceiveFrameString(out message); // this returns true if it's successful
+                        gotMessage = client.TryReceiveFrameString(out message); // this returns true if it's successful
                         if (gotMessage) break;
                     }
                     if (gotMessage)
                     {
-                        Debug.Log("Received " + message);
+                        //Debug.Log("Received " + message);
 
-                        //string newMessage = message.Replace("(", "");
-                        //string newNewMessage = newMessage.Replace(")", "");
-                        //string newNewNewMessage = newNewMessage.Replace(",", "");
+                        string newMessage = message.Replace("(", "");
+                        string newNewMessage = newMessage.Replace(")", "");
+                        string newNewNewMessage = newNewMessage.Replace(",", "");
 
 
 
-                        //string[] finalStringPath = newNewNewMessage.Split();
-                        //finalPath1 = finalStringPath.Select(s => int.Parse(s)).ToArray();
+                        string[] finalStringPath = newNewNewMessage.Split();
+                        finalPath1 = finalStringPath.Select(s => int.Parse(s)).ToArray();
 
-                        
+
                     }
                 }
             }

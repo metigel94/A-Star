@@ -44,6 +44,7 @@ public class HelloClient : MonoBehaviour
     private void Start()
     {
         _helloRequester = new HelloRequester();
+        Debug.Log("HelloClientNormal");
         _helloRequester.Start();
     }
 

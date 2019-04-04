@@ -361,6 +361,7 @@ GameObject:
   - component: {fileID: 183349660}
   - component: {fileID: 183349662}
   - component: {fileID: 183349663}
+  - component: {fileID: 183349664}
   m_Layer: 0
   m_Name: Grid
   m_TagString: Untagged
@@ -434,6 +435,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 877ac3885be66bf4e917d881ee1b0ace, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  joint: {x: 0, y: 0, z: 0, w: 0}
+  pos: {fileID: 0}
+--- !u!114 &183349664
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 183349659}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 414dbdc1fd434534fae676a2400d6757, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   joint: {x: 0, y: 0, z: 0, w: 0}
@@ -850,7 +864,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 760933268}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 18, y: 0, z: 22.8}
+  m_LocalPosition: {x: 7.44, y: 0, z: 29.29}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children: []
   m_Father: {fileID: 0}
