@@ -129,6 +129,7 @@ public class Grid : MonoBehaviour {
 
 
     public List<Node> path;
+    public List<Node> path1;
     void OnDrawGizmos()
     {
         
@@ -158,9 +159,17 @@ public class Grid : MonoBehaviour {
                     Gizmos.color = Color.red;
                 }
 
-                    if(path != null)
+                if(path != null)
                 {
                     if (path.Contains(n))
+                    {
+                        Gizmos.color = Color.black;
+                    }
+                }
+
+                if(path1 != null)
+                {
+                    if (path1.Contains(n))
                     {
                         Gizmos.color = Color.black;
                     }
