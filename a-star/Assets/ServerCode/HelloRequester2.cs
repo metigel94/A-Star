@@ -12,26 +12,25 @@ using System.Linq;
 ///     To use this class, you just instantiate, call Start() when you want to start and Stop() when you want to stop.
 
 
-public class HelloRequester1 : RunAbleThread
+public class HelloRequester2 : RunAbleThread
 {
-    public string messageToSend1;
-    public static int[] finalPath1;
+    public string messageToSend2;
+    public static int[] finalPath2;
 
     ///     Stop requesting when Running=false.
     protected override void Run()
     {
         ForceDotNet.Force();
-        finalPath1 = new int[1000];
+        finalPath2 = new int[1000];
 
-        using (RequestSocket client = new RequestSocket())
+        using (RequestSocket client2 = new RequestSocket())
         {
-            client.Connect("tcp://localhost:5550");
+            client2.Connect("tcp://localhost:5540");
             while (Running)
             {
                 if (Send)
                 {
-                    //string message = client.ReceiveFrameString();
-                    client.SendFrame(messageToSend1);
+                    client2.SendFrame(messageToSend2);
 
 
                     string message = null;
@@ -39,12 +38,11 @@ public class HelloRequester1 : RunAbleThread
 
                     while (Running)
                     {
-                        gotMessage = client.TryReceiveFrameString(out message); // this returns true if it's successful
+                        gotMessage = client2.TryReceiveFrameString(out message); // this returns true if it's successful
                         if (gotMessage) break;
                     }
                     if (gotMessage)
                     {
-                        //Debug.Log("Received " + message);
 
                         string newMessage = message.Replace("(", "");
                         string newNewMessage = newMessage.Replace(")", "");
@@ -53,7 +51,7 @@ public class HelloRequester1 : RunAbleThread
 
 
                         string[] finalStringPath = newNewNewMessage.Split();
-                        finalPath1 = finalStringPath.Select(s => int.Parse(s)).ToArray();
+                        finalPath2 = finalStringPath.Select(s => int.Parse(s)).ToArray();
 
 
                     }

@@ -2,7 +2,7 @@ import time
 import zmq
 from threading import Thread
 
-def splitGrid(input, size):
+def split_grid(input, size):
     return [input[start:start+size] for start in range(0, len(input), size)]
 
 class Node():
@@ -112,11 +112,9 @@ def astar(maze, start, end):
             open_list.append(child)
 
 
-class FirstServer():
+class Server():
 
-    
-
-    def runFirstServer(self):
+    def run_first_server(self):
 
         context = zmq.Context()
         socket = context.socket(zmq.REP)
@@ -135,13 +133,10 @@ class FirstServer():
                 grid = positions[4]
                 grid = list(grid)
                 grid = [int(i) for i in grid]
-                grid = splitGrid(grid, 50)
+                grid = split_grid(grid, 50)
                 gridSend = True
-        
-            # finalPath = astar(grid, testTouple, testTouple2)
+
             finalPath = astar(grid, startPosition, endPosition)
-            
-            # print(finalPath)
             
             pathToUnity = ", ".join(map(str, finalPath))
             
@@ -150,10 +145,7 @@ class FirstServer():
             #  In the real world usage, after you finish your work, send your output here
             socket.send(pathToUnity.encode())
 
-class SecondServer():
-
-    def runSecondServer(self):
-  
+    def run_second_server(self):
         context = zmq.Context()
         socket1 = context.socket(zmq.REP)
         socket1.bind("tcp://*:5550")
@@ -172,13 +164,10 @@ class SecondServer():
                 grid = positions[4]
                 grid = list(grid)
                 grid = [int(i) for i in grid]
-                grid = splitGrid(grid, 50)
+                grid = split_grid(grid, 50)
                 gridSend1 = True
         
-            # finalPath = astar(grid, testTouple, testTouple2)
             finalPath = astar(grid, startPosition, endPosition)
-            
-            print(finalPath)
             
             pathToUnity = ", ".join(map(str, finalPath))
             
@@ -187,13 +176,49 @@ class SecondServer():
             #  In the real world usage, after you finish your work, send your output here
             socket1.send(pathToUnity.encode())
 
+    def run_third_server(self):
+            context = zmq.Context()
+            socket2 = context.socket(zmq.REP)
+            socket2.bind("tcp://*:5540")
+
+            gridSend2 = False
+
+            while True:
+                message = socket2.recv()
+                
+                positions = message.decode().split(",")
+
+                startPosition = (50 - int(positions[0]), int(positions[1]))
+                endPosition = (50 - int(positions[2]), int(positions[3]))
+
+                if(gridSend2 == False):
+                    grid = positions[4]
+                    grid = list(grid)
+                    grid = [int(i) for i in grid]
+                    grid = split_grid(grid, 50)
+                    gridSend2 = True
+            
+                # finalPath = astar(grid, testTouple, testTouple2)
+                finalPath = astar(grid, startPosition, endPosition)
+                
+                print(finalPath)
+                
+                pathToUnity = ", ".join(map(str, finalPath))
+                
+                time.sleep(0.01)
+
+                #  In the real world usage, after you finish your work, send your output here
+                socket2.send(pathToUnity.encode())
+
+
 def main():
-    first = FirstServer()
-    second = SecondServer()
-    thread1 = Thread(target = first.runFirstServer)
-    thread2 = Thread(target = second.runSecondServer)
+    server = Server()
+    thread1 = Thread(target = server.run_first_server)
+    thread2 = Thread(target = server.run_second_server)
+    thread3 = Thread(target = server.run_third_server)
     thread1.start()
     thread2.start()
+    thread3.start()
 
 if __name__ == '__main__':
     main()

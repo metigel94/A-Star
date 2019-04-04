@@ -21,7 +21,7 @@ public class HelloRequester : RunAbleThread
     protected override void Run()
     {
         ForceDotNet.Force();
-        finalPath = new int[49];
+        finalPath = new int[1000];
 
         using (RequestSocket client = new RequestSocket())
         {

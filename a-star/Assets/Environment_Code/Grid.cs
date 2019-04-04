@@ -130,6 +130,7 @@ public class Grid : MonoBehaviour {
 
     public List<Node> path;
     public List<Node> path1;
+    public List<Node> path2;
     void OnDrawGizmos()
     {
         
@@ -163,7 +164,7 @@ public class Grid : MonoBehaviour {
                 {
                     if (path.Contains(n))
                     {
-                        Gizmos.color = Color.black;
+                        Gizmos.color = Color.magenta;
                     }
                 }
 
@@ -171,7 +172,15 @@ public class Grid : MonoBehaviour {
                 {
                     if (path1.Contains(n))
                     {
-                        Gizmos.color = Color.black;
+                        Gizmos.color = Color.magenta;
+                    }
+                }
+
+                if (path2 != null)
+                {
+                    if (path2.Contains(n))
+                    {
+                        Gizmos.color = Color.magenta;
                     }
                 }
                 Gizmos.DrawCube(n.worldPosition, new Vector3(1, height, 1) * (nodeDiameter - .1f));

@@ -1,15 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading;
 
 public class Pathfinding : MonoBehaviour
 {
     public Grid grid;
 
-    public Transform seeker, seeker1, target;
+    public Transform seeker, seeker1, seeker2, target;
 
     public List<Node> path = new List<Node>();
     public List<Node> path1 = new List<Node>();
+    public List<Node> path2 = new List<Node>();
 
     bool once = true;
 
@@ -17,29 +19,47 @@ public class Pathfinding : MonoBehaviour
 
     public int[] finalPath;
     public int[] finalPath1;
+    public int[] finalPath2;
 
     int i = 0;
+    int j = 0;
+    int k = 0;
 
     Vector3 currentWaypoint;
     Vector3 currentWaypoint1;
-
-
+    Vector3 currentWaypoint2;
 
     void Awake()
     {
         grid = GetComponent<Grid>();
         currentWaypoint = seeker.transform.position;
         currentWaypoint1 = seeker1.transform.position;
+        currentWaypoint2 = seeker2.transform.position;
     }
 
     void Update()
     {
-
+        MouseClick();
         CreateNodes();
         CreateNodes1();
+        CreateNodes2();
         FollowPath();
         FollowPath1();
+        FollowPath2();
+    }
 
+    void MouseClick()
+    {
+        if (Input.GetMouseButton(0))
+        {
+            Vector3 newPosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 45f));
+            target.transform.position = newPosition;
+            if(target.transform.position.y != 0)
+            {
+                newPosition.y = 0;
+                target.transform.position = newPosition;
+            }
+        }
     }
 
     void FollowPath()
@@ -73,18 +93,17 @@ public class Pathfinding : MonoBehaviour
         {
             if (seeker1.transform.position == currentWaypoint1)
             {
-                if (i < grid.path1.Count - 1)
+                if (j < grid.path1.Count - 1)
                 {
-                    i++;
-                    currentWaypoint1 = grid.path1[i].worldPosition;
+                    j++;
+                    currentWaypoint1 = grid.path1[j].worldPosition;
                 }
 
-                if (i >= grid.path1.Count - 1)
+                if (j >= grid.path1.Count - 1)
                 {
-                    i = 0;
+                    j = 0;
                 }
 
-                Debug.Log("Currentwaypoint: " + currentWaypoint1);
             }
             seeker1.transform.position = Vector3.MoveTowards(seeker1.transform.position, currentWaypoint1, 0.1f);
         }
@@ -92,33 +111,58 @@ public class Pathfinding : MonoBehaviour
 
     }
 
-    void CreateNodes()
+    void FollowPath2()
     {
-        finalPath = HelloRequester.finalPath;
-
-        if (finalPath[0] != 0)
+        if (grid.path2 != null)
         {
-            if (seeker.hasChanged || target.hasChanged)
+            if (seeker2.transform.position == currentWaypoint2)
             {
-                path.Clear();
-
-                for (int i = 0; i < finalPath.Length; i++)
+                if (k < grid.path2.Count - 1)
                 {
-                    if (i % 2 == 0) // x-value
-                    {
-                        Node test = grid.NodeFromWorldPoint(new Vector3(finalPath[i + 1], 0, Mathf.Abs((finalPath[i]) - 50)));
-                        path.Add(test);
-                    }
+                    k++;
+                    currentWaypoint2 = grid.path2[k].worldPosition;
                 }
 
-                grid.path = path;
+                if (k >= grid.path2.Count - 1)
+                {
+                    k = 0;
+                }
 
-                // FollowPath(finalPath, grid.path);
-
-                seeker.hasChanged = false;
-                target.hasChanged = false;
             }
+            seeker2.transform.position = Vector3.MoveTowards(seeker2.transform.position, currentWaypoint2, 0.1f);
         }
+
+
+    }
+
+    void CreateNodes()
+    {
+        
+            finalPath = HelloRequester.finalPath;
+
+            if (finalPath[0] != 0)
+            {
+                if (seeker.hasChanged || target.hasChanged)
+                {
+                    path.Clear();
+
+                    for (int i = 0; i < finalPath.Length; i++)
+                    {
+                        if (i % 2 == 0) // x-value
+                        {
+                            Node test = grid.NodeFromWorldPoint(new Vector3(finalPath[i + 1], 0, Mathf.Abs((finalPath[i]) - 50)));
+                            path.Add(test);
+                        }
+                    }
+
+                    grid.path = path;
+
+                    seeker.hasChanged = false;
+                }
+            }
+            //yield return null;
+        
+  
     }
 
     void CreateNodes1()
@@ -142,9 +186,33 @@ public class Pathfinding : MonoBehaviour
 
                 grid.path1 = path1;
 
-                // FollowPath(finalPath, grid.path);
-
                 seeker1.hasChanged = false;
+            }
+        }
+    }
+
+    void CreateNodes2()
+    {
+        finalPath2 = HelloRequester2.finalPath2;
+
+        if (finalPath2[0] != 0)
+        {
+            if (seeker2.hasChanged || target.hasChanged)
+            {
+                path2.Clear();
+
+                for (int i = 0; i < finalPath2.Length; i++)
+                {
+                    if (i % 2 == 0) // x-value
+                    {
+                        Node test = grid.NodeFromWorldPoint(new Vector3(finalPath2[i + 1], 0, Mathf.Abs((finalPath2[i]) - 50)));
+                        path2.Add(test);
+                    }
+                }
+
+                grid.path2 = path2;
+
+                seeker2.hasChanged = false;
                 target.hasChanged = false;
 
             }
