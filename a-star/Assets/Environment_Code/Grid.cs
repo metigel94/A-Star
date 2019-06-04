@@ -23,6 +23,7 @@ public class Grid : MonoBehaviour {
         CreateGrid();
     }
 
+    // CreateGrid() function creates a grid of a certain size with tiles that have different costs
     void CreateGrid()
     {
         grid = new Node[gridSizeX, gridSizeY];
@@ -47,7 +48,9 @@ public class Grid : MonoBehaviour {
             }
         }
 
-
+        // This nested for-loop converts the created grid into one long string, so it can be sent to Python.
+        // A '0' indicates normal walkable terrain, a '1' indicates grass, a '2' indicates mudd
+        // and a '3' represents unwalkable terrain.
         for(int y = gridSizeY-1; y > 0; y--)
         {
             for(int x = 0; x < gridSizeX; x++)
@@ -84,7 +87,7 @@ public class Grid : MonoBehaviour {
         Debug.Log(grid.Length);
     }
 
-
+    // Check neighboring nodes
     public List<Node> GetNeighbors(Node node)
     {
         List<Node> neighbors = new List<Node>();
@@ -111,22 +114,18 @@ public class Grid : MonoBehaviour {
         return neighbors;
     }
 
+
+    // Convert Node to world coordinates
     public Node NodeFromWorldPoint(Vector3 worldPosition)
     {
-        //float percentX = (worldPosition.x + gridWorldSize.x / 2) / gridWorldSize.x;
-        //float percentY = (worldPosition.z + gridWorldSize.y / 2) / gridWorldSize.y;
-        //percentX = Mathf.Clamp01(percentX);
-        //percentY = Mathf.Clamp01(percentY);
-
-        //int x = Mathf.RoundToInt((gridSizeX - 1) * percentX);
-        //int y = Mathf.RoundToInt((gridSizeY - 1) * percentY);
-
         int x = Mathf.RoundToInt(worldPosition.x / (nodeRadius * 2)) -1;
         int y = Mathf.RoundToInt(worldPosition.z / (nodeRadius * 2)) -1;
 
         return grid[x, y];
     }
 
+
+    // Iterate over each node in the grid to give them a color that corresponds to their tile cost.
 
     public List<Node> path;
     public List<Node> path1;

@@ -1,12 +1,33 @@
+# ------------------------------------------------------------------------------------------------
+# This python scripts implements the A*-star (A-star) pathfinding algorithm.
+# 
+# The script is meant to be coupled with a game (e.g., Unity) where it can handle
+# the pathfinding of up to 3 clients and four different tile-costs.
+# 
+# The tile costs should be defined within the grid in ascending
+# order, i.e. '0' = lowest tile cost and '3' = unwalkable.
+# 
+# This script receives an input-grid and up to three starting coordinates over a socket, 
+# processes them and sends the fastest path from each starting coordinates to the
+# end node, back over that same socket.
+# 
+# For the script to work, it is important for the clients to connect to 
+# the three sockets that are defined in line 139, line 169 and line 200.
+# ------------------------------------------------------------------------------------------------
+
+
 import time
 import zmq
 from threading import Thread
 
+
+# This function converts the incoming string into a grid into the size given as the argument
 def split_grid(input, size):
     return [input[start:start+size] for start in range(0, len(input), size)]
 
+
+# A node class for A* Pathfinding
 class Node():
-    """A node class for A* Pathfinding"""
 
     def __init__(self, parent=None, position=None):
         self.parent = parent
@@ -19,8 +40,10 @@ class Node():
     def __eq__(self, other):
         return self.position == other.position
 
+
+# astar() returns a list of tuples as a path from the given start coordinates to the given
+# end coordinates in the provided grid
 def astar(maze, start, end):
-    """Returns a list of tuples as a path from the given start to the given end in the given maze"""
 
     # Create start and end node
     start_node = Node(None, start)
@@ -71,7 +94,7 @@ def astar(maze, start, end):
             if node_position[0] > (len(maze) - 1) or node_position[0] < 0 or node_position[1] > (len(maze[len(maze)-1]) -1) or node_position[1] < 0:
                 continue
 
-            # Make sure walkable terrain
+            # Define different tile costs in ascending order
             if maze[node_position[0]][node_position[1]] == 3:
                 continue
 
@@ -112,23 +135,35 @@ def astar(maze, start, end):
             open_list.append(child)
 
 
+
+# Server class to provide communication over TCP protocol
 class Server():
 
+    # This server class defines 3 indentical functions. Each function is concerned with one of the clients in the game.
+    # The only difference between the functions is the socket that is bound to the server.
     def run_first_server(self):
 
+        # Create server socket and bind to port number
         context = zmq.Context()
         socket = context.socket(zmq.REP)
         socket.bind("tcp://*:5555")
 
         gridSend = False
+
+        # Create an infinite loop so values can be sent and received constantly
         while True:
+            # receive data from socket (coordinates of first client)
             message = socket.recv()
             
+            # decode and split string of coordinates
             positions = message.decode().split(",")
 
+            # define start and end coordinates of first client
             startPosition = (50 - int(positions[0]), int(positions[1]))
             endPosition = (50 - int(positions[2]), int(positions[3]))
 
+            # The grid has a size of 50x50. Therefore, we use the split_grid function from earlier,
+            # to split the grid into a new list, every 50 characters.
             if(gridSend == False):
                 grid = positions[4]
                 grid = list(grid)
@@ -136,15 +171,21 @@ class Server():
                 grid = split_grid(grid, 50)
                 gridSend = True
 
+            # Now we pass the grid and the start and end coordinates of the client to the astar() function
+            # and store the return value of the function, which is the final path, in a variable.
             finalPath = astar(grid, startPosition, endPosition)
             
+            # The coordinates in the final path are split by ', ' and stored in a variable.
             pathToUnity = ", ".join(map(str, finalPath))
             
             time.sleep(0.01)
 
-            #  In the real world usage, after you finish your work, send your output here
+            # The final path is encoded using utf-8, so that it can be sent over the socket
+            # and received by Unity.
             socket.send(pathToUnity.encode())
 
+
+    # Functionality and implementation is identical to 'run_first_server'
     def run_second_server(self):
         context = zmq.Context()
         socket1 = context.socket(zmq.REP)
@@ -176,6 +217,8 @@ class Server():
             #  In the real world usage, after you finish your work, send your output here
             socket1.send(pathToUnity.encode())
 
+
+    # Functionality and implementation is identical to 'run_first_server'
     def run_third_server(self):
             context = zmq.Context()
             socket2 = context.socket(zmq.REP)
@@ -212,6 +255,10 @@ class Server():
 
 
 def main():
+    # An instance of the server class is created and a thread 
+    # for each function in the class is created.
+    # Finally, all three threads are started, to allow for multithreaded
+    # computing of the path for each client.
     server = Server()
     thread1 = Thread(target = server.run_first_server)
     thread2 = Thread(target = server.run_second_server)

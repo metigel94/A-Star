@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+// Public Node class that contains all the necessary attributes for a Node, including type of tile,
+// position in world coordinates and the dimensions of the grid.
 public class Node {
 
     public bool walkable;

@@ -7,32 +7,30 @@ using System.Collections.Generic;
 using System.Runtime;
 using System.Linq;
 
-
-///     You can copy this class and modify Run() to suits your needs.
-///     To use this class, you just instantiate, call Start() when you want to start and Stop() when you want to stop.
-
+// The implementation described in this class is identical to 'HelloRequester1' and 'HelloRequester2'.
+// This class implements the 'RunAbleThread' Class.
 
 public class HelloRequester : RunAbleThread
 {
     public string messageToSend;
     public static int[] finalPath;
 
-    ///     Stop requesting when Running=false.
     protected override void Run()
     {
         ForceDotNet.Force();
         finalPath = new int[1000];
 
+        // Create a new socket that binds to the port number for the first seeker character, as defined in Python.
         using (RequestSocket client = new RequestSocket())
         {
+            // Port number for the first character defined in Python.
             client.Connect("tcp://localhost:5555");
             while(Running)
             {
                 if (Send)
                 {
-                    //string message = client.ReceiveFrameString();
+                    // Here, the message string that is defined in 'HelloClient' is sent over the socket.
                     client.SendFrame(messageToSend);
-                    
 
                     string message = null;
                     bool gotMessage = false;
@@ -44,7 +42,8 @@ public class HelloRequester : RunAbleThread
                     }
                     if (gotMessage)
                     {
-                        //Debug.Log("Received " + message);
+                        // Here, the string received from Python (the final path) is split to remove unnecessary characters.
+                        // Furthermore, it is put into a static array, so the coordinates can be easily accessed in Pathfinding.cs 
 
                         string newMessage = message.Replace("(","");
                         string newNewMessage = newMessage.Replace(")", "");

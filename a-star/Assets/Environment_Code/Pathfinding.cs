@@ -5,6 +5,8 @@ using System.Threading;
 
 public class Pathfinding : MonoBehaviour
 {
+    // Declare and initialize variables
+
     public Grid grid;
 
     public Transform seeker, seeker1, seeker2, target;
@@ -31,12 +33,14 @@ public class Pathfinding : MonoBehaviour
 
     void Awake()
     {
+        // Store the grid and the position of each seeker in a variable.
         grid = GetComponent<Grid>();
         currentWaypoint = seeker.transform.position;
         currentWaypoint1 = seeker1.transform.position;
         currentWaypoint2 = seeker2.transform.position;
     }
 
+    // All functions that are neccessary for the three seeker characters are called in the Upadte() function.
     void Update()
     {
         MouseClick();
@@ -48,6 +52,7 @@ public class Pathfinding : MonoBehaviour
         FollowPath2();
     }
 
+    // Target character moves to the position of the mouse-cursor, when the left mouse-button is clicked
     void MouseClick()
     {
         if (Input.GetMouseButton(0))
@@ -62,6 +67,7 @@ public class Pathfinding : MonoBehaviour
         }
     }
 
+    // This functions ensures that the first seeker-character moves along the final path
     void FollowPath()
     {
 
@@ -87,6 +93,7 @@ public class Pathfinding : MonoBehaviour
 
     }
 
+    // This functions ensures that the second seeker-character moves along the final path
     void FollowPath1()
     {
         if (grid.path1 != null)
@@ -111,6 +118,7 @@ public class Pathfinding : MonoBehaviour
 
     }
 
+    // This functions ensures that the third seeker-character moves along the final path
     void FollowPath2()
     {
         if (grid.path2 != null)
@@ -135,6 +143,7 @@ public class Pathfinding : MonoBehaviour
 
     }
 
+    // Add the final path received from python to the final path of the first seeker in Unity
     void CreateNodes()
     {
         
@@ -159,12 +168,10 @@ public class Pathfinding : MonoBehaviour
 
                     seeker.hasChanged = false;
                 }
-            }
-            //yield return null;
-        
-  
+            }       
     }
 
+    // Add the final path received from python to the final path of the second seeker in Unity
     void CreateNodes1()
     {
         finalPath1 = HelloRequester1.finalPath1;
@@ -191,6 +198,7 @@ public class Pathfinding : MonoBehaviour
         }
     }
 
+    // Add the final path received from python to the final path of the third seeker in Unity
     void CreateNodes2()
     {
         finalPath2 = HelloRequester2.finalPath2;
@@ -219,112 +227,3 @@ public class Pathfinding : MonoBehaviour
         }
     }
 }
-
-//    IEnumerator FollowPath(int[] finalPath, List<Node> path)
-//    {
-//        Vector3 currentWaypoint = new Vector3(finalPath[0], 0, finalPath[1]);
-
-//        while(true)
-//        {
-//            if(seeker.transform.position == currentWaypoint)
-//            {
-//                targetIndex++;
-//                if(targetIndex >= path.Count)
-//                {
-//                    yield break;
-//                }
-//                if(targetIndex % 2 == 0)
-//                {
-//                    currentWaypoint = new Vector3(finalPath[targetIndex], 0, finalPath[targetIndex+1]);
-//                }
-//            }
-
-//            seeker.transform.position = Vector3.MoveTowards(seeker.transform.position, currentWaypoint, 0.05f);
-//            yield return null;
-//        }
-//    }
-//}
-
-
-
-//    void FindPath(Vector3 startPos, Vector3 targetPos)
-//    {
-//        Node startNode = grid.NodeFromWorldPoint(startPos);
-//        Node targetNode = grid.NodeFromWorldPoint(targetPos);
-
-//        List<Node> openSet = new List<Node>();
-//        HashSet<Node> closedSet = new HashSet<Node>();
-//        openSet.Add(startNode);
-
-//        while (openSet.Count > 0)
-//        {
-//            Node currentNode = openSet[0];
-//            for (int i = 1; i < openSet.Count; i++)
-//            {
-//                if (openSet[i].fCost < currentNode.fCost || openSet[i].fCost == currentNode.fCost)
-//                {
-//                    if (openSet[i].hCost < currentNode.hCost)
-//                    {
-//                        currentNode = openSet[i];
-//                    }
-//                }
-//            }
-
-//            openSet.Remove(currentNode);
-//            closedSet.Add(currentNode);
-
-//            if (currentNode == targetNode)
-//            {
-//                RetracePath(startNode, targetNode);
-//                return;
-//            }
-
-//            foreach (Node neighbor in grid.GetNeighbors(currentNode))
-//            {
-//                if (!neighbor.walkable || closedSet.Contains(neighbor))
-//                {
-//                    continue;
-//                }
-//                int newMovementCostToNeighbor = currentNode.gCost + GetDistance(currentNode, neighbor);
-//                if (newMovementCostToNeighbor < neighbor.gCost || !openSet.Contains(neighbor))
-//                {
-//                    neighbor.gCost = newMovementCostToNeighbor;
-//                    neighbor.hCost = GetDistance(neighbor, targetNode);
-//                    neighbor.parent = currentNode;
-
-//                    if (!openSet.Contains(neighbor))
-//                        openSet.Add(neighbor);
-//                }
-//            }
-//        }
-//    }
-
-
-//    void RetracePath(Node startNode, Node endNode)
-//    {
-//        List<Node> path = new List<Node>();
-//        Node currentNode = endNode;
-//        while (currentNode != startNode)
-//        {
-//            path.Add(currentNode);
-//            currentNode = currentNode.parent;
-//        }
-//        path.Reverse();
-//        grid.path = path;
-
-//    }
-
-//    int GetDistance(Node nodeA, Node nodeB)
-//    {
-//        int dstX = Mathf.Abs(nodeA.gridX - nodeB.gridX);
-//        int dstY = Mathf.Abs(nodeA.gridY - nodeB.gridY);
-
-
-//        if (dstX > dstY)
-//        {
-//            return 14 * dstY + 10 * (dstX - dstY);
-//        }
-
-//        return 14 * dstX + 10 * (dstY - dstX);
-//    }
-//}
